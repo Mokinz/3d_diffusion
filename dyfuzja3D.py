@@ -4,16 +4,42 @@ from tqdm import tqdm
 from math import pow
 
 """Inputs"""
+
 # Program Run Count
 Lp = int(input("Results accuracy (If you don't know, we recommend 20): "))
+if Lp < 1:
+    while Lp < 1:
+        Lp = int(input("This factor can't be lower than one. Please, enter it again: "))
+
 # Side of Cube
 L = int(input("Size of the side of cube: "))
+if L < 1:
+    while L < 1:
+        L = int(input("This factor can't be lower than one. Please, enter it again: "))
+
 # Atom Quantity
 N = int(input("Atom Quantity: "))
+if N > pow(L, 3):
+    while N > pow(L, 3):
+        N = int(
+            input("This factor can't be greater than L^3. Please, enter it again: ")
+        )
+
 # Monte Carlo Steps
 mcs = int(input("Monte Carlo Steps: "))
-# Accuracy means that how many of last indexes takes and calculate average
+if mcs < 1:
+    while mcs < 1:
+        mcs = int(
+            input("This factor can't be lower than one. Please, enter it again: ")
+        )
+
+# Accuracy means that how many of last indexes are taken to calculate average D for system
 average = int(input("Accuracy of avarage: "))
+if average < 1:
+    while average < 1:
+        average = int(
+            input("This factor can't be lower than one. Please, enter it again: ")
+        )
 
 """Variables"""
 # Average from all program runs (Lp) for each step
@@ -90,10 +116,6 @@ for program_run in tqdm(range(Lp)):
                         cube[0][y][z] = 1
                         t_cube[next_atom][0] = 0
                         deltaX[next_atom] += 1
-                        continue
-
-                    else:
-                        break
 
                 else:
                     if cube[x + 1][y][z] == 0:
@@ -101,10 +123,6 @@ for program_run in tqdm(range(Lp)):
                         cube[x + 1][y][z] = 1
                         t_cube[next_atom][0] = x + 1
                         deltaX[next_atom] += 1
-                        continue
-
-                    else:
-                        break
 
             elif move == 1:
                 """ x - 1 """
@@ -115,10 +133,6 @@ for program_run in tqdm(range(Lp)):
                         cube[L - 1][y][z] = 1
                         t_cube[next_atom][0] = L - 1
                         deltaX[next_atom] -= 1
-                        continue
-
-                    else:
-                        break
 
                 else:
                     if cube[x - 1][y][z] == 0:
@@ -126,10 +140,6 @@ for program_run in tqdm(range(Lp)):
                         cube[x - 1][y][z] = 1
                         t_cube[next_atom][0] = x - 1
                         deltaX[next_atom] -= 1
-                        continue
-
-                    else:
-                        break
 
             elif move == 2:
                 """ y + 1 """
@@ -140,10 +150,6 @@ for program_run in tqdm(range(Lp)):
                         cube[x][0][z] = 1
                         t_cube[next_atom][1] = 0
                         deltaY[next_atom] += 1
-                        continue
-
-                    else:
-                        break
 
                 else:
                     if cube[x][y + 1][z] == 0:
@@ -151,10 +157,6 @@ for program_run in tqdm(range(Lp)):
                         cube[x][y + 1][z] = 1
                         t_cube[next_atom][1] = y + 1
                         deltaY[next_atom] += 1
-                        continue
-
-                    else:
-                        break
 
             elif move == 3:
                 """ y - 1 """
@@ -165,10 +167,6 @@ for program_run in tqdm(range(Lp)):
                         cube[x][L - 1][z] = 1
                         t_cube[next_atom][1] = L - 1
                         deltaY[next_atom] -= 1
-                        continue
-
-                    else:
-                        break
 
                 else:
                     if cube[x][y - 1][z] == 0:
@@ -176,10 +174,6 @@ for program_run in tqdm(range(Lp)):
                         cube[x][y - 1][z] = 1
                         t_cube[next_atom][1] = y - 1
                         deltaY[next_atom] -= 1
-                        continue
-
-                    else:
-                        break
 
             elif move == 4:
                 """ z + 1 """
@@ -190,10 +184,6 @@ for program_run in tqdm(range(Lp)):
                         cube[x][y][0] = 1
                         t_cube[next_atom][2] = 0
                         deltaZ[next_atom] += 1
-                        continue
-
-                    else:
-                        break
 
                 else:
                     if cube[x][y][z + 1] == 0:
@@ -201,10 +191,6 @@ for program_run in tqdm(range(Lp)):
                         cube[x][y][z + 1] = 1
                         t_cube[next_atom][2] = z + 1
                         deltaZ[next_atom] += 1
-                        continue
-
-                    else:
-                        break
 
             else:
                 """ z - 1 """
@@ -215,10 +201,6 @@ for program_run in tqdm(range(Lp)):
                         cube[x][y][L - 1] = 1
                         t_cube[next_atom][2] = L - 1
                         deltaZ[next_atom] -= 1
-                        continue
-
-                    else:
-                        break
 
                 else:
                     if cube[x][y][z - 1] == 0:
@@ -226,10 +208,6 @@ for program_run in tqdm(range(Lp)):
                         cube[x][y][z - 1] = 1
                         t_cube[next_atom][2] = z - 1
                         deltaZ[next_atom] -= 1
-                        continue
-
-                    else:
-                        break
 
         # R2 Loop
         for next_atom in range(N):
@@ -262,3 +240,4 @@ for i in tqdm(range(mcs)):
     f.write(val)
 f.close()
 print("Done!")
+print("Average diffusion factor: " + str(D_stabilised))
